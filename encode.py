@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import math
 
 
 def Arithmetic_coding(input_codes, input_prob):
@@ -20,7 +19,7 @@ def Arithmetic_coding(input_codes, input_prob):
 img = cv2.imread('test.jpg', cv2.IMREAD_GRAYSCALE)
 n = len(img)
 m = len(img[0])
-block_size = 13
+block_size = 8
 flattened_img = img.flatten()
 flattened_size = int((n * m) % block_size) + int((n * m) / block_size)
 prob = np.array([0] * 255)
@@ -33,7 +32,7 @@ for pixel in range(0, len(prob)):
         prob[pixel] += prob[pixel - 1]
 codes = ([0] * flattened_size)
 start = 0
-end = 16
+end = block_size
 for index in range(0, flattened_size):
     if end < len(flattened_img):
         code = Arithmetic_coding(
@@ -46,4 +45,4 @@ for index in range(0, flattened_size):
         break
 encoded = np.array(codes)
 np.save('encoded.npy', encoded)
-cv2.imshow('test', img)
+np.save('prob.npy', prob)
